@@ -1,0 +1,5 @@
+package com.nagarro.microservices.productservice.controller;
+
+public class ProductServiceController {
+
+}
