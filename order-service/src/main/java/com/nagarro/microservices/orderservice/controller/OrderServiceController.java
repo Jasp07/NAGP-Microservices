@@ -12,14 +12,14 @@ import com.nagarro.microservices.orderservice.Configuration;
 import com.nagarro.microservices.orderservice.beans.Order;
 import com.nagarro.microservices.orderservice.proxy.ProductBean;
 import com.nagarro.microservices.orderservice.proxy.ProductServiceProxy;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @RestController
 public class OrderServiceController {
 
-	
-	@Autowired 
+	@Autowired
 	ProductServiceProxy productServiceProxy;
-	 
+
 	/*
 	 * @Autowired Environment env;
 	 */
@@ -36,12 +36,12 @@ public class OrderServiceController {
 		return result;
 	}
 
-	/*
-	 * @GetMapping("/hysterixExample")
-	 * 
-	 * @HystrixCommand(fallbackMethod = "fallbackGetOrders") public Order
-	 * getOrders() { throw new RuntimeException("Hysterix Example"); }
-	 */
+	@GetMapping("/hysterixExample")
+
+	@HystrixCommand(fallbackMethod = "fallbackGetOrders")
+	public Order getOrders() {
+		throw new RuntimeException("Hysterix Example");
+	}
 
 	public Order fallbackGetOrders() {
 		List<ProductBean> list = new ArrayList<>();

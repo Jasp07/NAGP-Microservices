@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Component
 // @FeignClient(name = "product-service", url="localhost:8000")
 @RibbonClient(name = "product-service")
-@FeignClient(name = "product-service")
-//@FeignClient(name = "netflix-api-zuul-gateway-server")
+//@FeignClient(name = "product-service")
+@FeignClient(name = "netflix-api-zuul-gateway-server")
 public interface ProductServiceProxy {
-	@GetMapping("/products")
-	//@GetMapping("/product-service/products")
+	//@GetMapping("/products")
+	@GetMapping("/product-service/products")
 	public List<ProductBean> fetchProductsList();
 
 }
