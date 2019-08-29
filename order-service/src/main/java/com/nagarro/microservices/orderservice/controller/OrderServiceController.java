@@ -3,6 +3,7 @@ package com.nagarro.microservices.orderservice.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,24 +21,22 @@ public class OrderServiceController {
 	@Autowired
 	ProductServiceProxy productServiceProxy;
 
-	/*
-	 * @Autowired Environment env;
-	 */
-
 	@Autowired
 	Configuration configuration;
+	
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
 
 	@GetMapping("/orders/{orderId}")
 	public Order getOrderDetails(@PathVariable String orderId) {
 		List<ProductBean> list = productServiceProxy.fetchProductsList();
-
 		Order result = new Order(orderId, list, 500d);
 		result.setSla(configuration.getSla());
+		rabbitTemplate.convertAndSend("spring-boot-exchange", "product.fetched", "test message");
 		return result;
 	}
 
 	@GetMapping("/hysterixExample")
-
 	@HystrixCommand(fallbackMethod = "fallbackGetOrders")
 	public Order getOrders() {
 		throw new RuntimeException("Hysterix Example");
@@ -49,3 +48,4 @@ public class OrderServiceController {
 	}
 
 }
+
