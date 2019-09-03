@@ -1,5 +1,0 @@
-package com.nagarro.microservices.productservice.model;
-
-public class Products {
-
-}
